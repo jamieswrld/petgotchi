@@ -257,13 +257,13 @@ function renderHud() {
 
 // --- pet animation --------------------------------------------------------
 let petFrame = 0;
-const heroImg = $("#hero-pet");
+const heroImg = $("#hero-pet"); // optional — landing uses the logo, not the animated pet
 const gameImg = $("#game-pet");
-heroImg.src = PET_FRAMES[0];
+if (heroImg) heroImg.src = PET_FRAMES[0];
 gameImg.src = PET_FRAMES[0];
 setInterval(() => {
   petFrame = (petFrame + 1) % PET_FRAMES.length;
-  heroImg.src = PET_FRAMES[petFrame];
+  if (heroImg) heroImg.src = PET_FRAMES[petFrame];
   gameImg.src = PET_FRAMES[petFrame];
 }, 130);
 

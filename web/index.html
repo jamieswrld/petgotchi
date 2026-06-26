@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gotchi — Play-to-Earn Pet</title>
   <meta name="description" content="Gotchi — raise your digital pet and earn $GOTCHI. Play-to-earn." />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,23 +13,31 @@
 
     <!-- ENTRY / LOGIN -->
     <section id="screen-entry" class="screen active">
+      <div class="bg-decor" aria-hidden="true">
+        <span class="glow glow-1"></span>
+        <span class="glow glow-2"></span>
+        <span class="glow glow-3"></span>
+        <span class="petal petal-1"></span>
+        <span class="petal petal-2"></span>
+        <span class="petal petal-3"></span>
+        <span class="petal petal-4"></span>
+        <span class="petal petal-5"></span>
+        <span class="petal petal-6"></span>
+      </div>
+
       <div class="entry-card">
+        <img class="logo" src="assets/logo.png" alt="Gotchi logo" />
         <h1 class="brand">Gotchi</h1>
         <p class="tagline">Raise your pet. Earn <span class="token">$GOTCHI</span>.</p>
 
-        <div class="pet-hero">
-          <img id="hero-pet" alt="Gotchi pet" />
-        </div>
-
         <div class="entry-actions">
-          <button id="btn-connect" class="btn btn-primary">Connect Wallet</button>
-          <button id="btn-guest" class="btn btn-ghost">Play as Guest</button>
+          <button id="btn-connect" type="button" class="btn btn-primary">Connect Wallet</button>
+          <button id="btn-guest" type="button" class="btn btn-ghost">Play as Guest</button>
         </div>
         <p class="entry-note">Wallet players keep their progress. Guests play freely, but nothing is saved.</p>
 
-        <button id="btn-how-entry" class="link-btn">How to earn $GOTCHI →</button>
+        <button id="btn-how-entry" type="button" class="link-btn">How to earn $GOTCHI →</button>
       </div>
-      <footer class="disclaimer">Demo build · $GOTCHI is an in-game token with no real-world value.</footer>
     </section>
 
     <!-- HOW TO EARN -->
@@ -61,7 +70,7 @@
     <!-- GAME -->
     <section id="screen-game" class="screen">
       <header class="topbar">
-        <div class="brand-sm">Gotchi</div>
+        <div class="brand-sm"><img class="brand-logo" src="assets/logo.png" alt="" />Gotchi</div>
         <div class="wallet-chip" id="wallet-chip"></div>
         <div class="balance-chip">
           <span class="token">$GOTCHI</span>
