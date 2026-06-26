@@ -1,0 +1,13 @@
+# Cloudflare Pages config for Gotchi (petgotchi.xyz)
+# Deploy from the repo root:  npx wrangler pages deploy web
+name = "petgotchi"
+compatibility_date = "2024-11-01"
+pages_build_output_dir = "web"
+
+# Cross-device saves use a Workers KV namespace. Create it once:
+#   npx wrangler kv namespace create GOTCHI_KV
+# then paste the returned id below and uncomment this block.
+# (Until configured, /api/save returns 503 and the app falls back to localStorage.)
+# [[kv_namespaces]]
+# binding = "GOTCHI_KV"
+# id = "REPLACE_WITH_KV_NAMESPACE_ID"

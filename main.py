@@ -6,6 +6,7 @@ import foodClass
 import panelClass
 import playClass
 import statisticsClass
+import gotchiClass as gotchi
 from buttonClass import Button
 from mainConst import action, tamagotchiJump, pixel_font
 from abs_path import abs_path
@@ -31,7 +32,7 @@ cantClear = False
 cantHelp = False
 
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption('Tamagotchi')
+pygame.display.set_caption('Gotchi')
 pygame.display.set_icon(pygame.image.load(abs_path('images/sprites/logika.ico')))
 clock = pygame.time.Clock()
 start_time = None
@@ -79,6 +80,7 @@ def clearAfter():
     global cantClear
     if action['toilet'] + 16 <= 100:
         action['toilet'] += 16
+        gotchi.add_xp(10)
         toilet_sound = pygame.mixer.Sound(abs_path('sounds/toilet.ogg'))
         toilet_sound.play()
     else:
@@ -91,6 +93,7 @@ def medicine():
         if action['health'] + 10 <= 100:
             action['health'] += 10
             action['logiki'] -= 3
+            gotchi.add_xp(8)
             medicine_sound = pygame.mixer.Sound(abs_path('sounds/medicine.ogg'))
             medicine_sound.play()
         else:
@@ -117,6 +120,11 @@ start_btn = Button(140, 150, 200, 50, abs_path('images/sprites/buttonLong_brown.
 rule_btn = Button(140, 250, 200, 50, abs_path('images/sprites/buttonLong_brown.png'), 'Help')
 exit_btn = Button(140, 350, 200, 50, abs_path('images/sprites/buttonLong_brown.png'), 'Exit')
 
+wallet_menu_btn = Button(650, 150, 270, 50, abs_path('images/sprites/buttonLong_brown.png'), 'Connect Wallet')
+earn_menu_btn = Button(650, 250, 270, 50, abs_path('images/sprites/buttonLong_brown.png'), 'How to Earn')
+wallet_panel = gotchi.WalletPanel()
+earn_panel = gotchi.EarnPanel()
+
 
 info_satiety = Button(20, 30, 25, 50, abs_path('images/sprites/lightning.png'))
 info_toilet = Button(150, 30, 50, 50, abs_path('images/sprites/toilet.png'))
@@ -124,6 +132,7 @@ info_happy = Button(270, 30, 50, 50, abs_path('images/sprites/smile.png'))
 info_health = Button(30, 90, 60, 60, abs_path('images/sprites/health.png'))
 
 btn_statistic = Button(715, 40, 150, 50, abs_path('images/sprites/buttonLong_brown.png'), 'Statistic')
+btn_wallet = Button(715, 100, 150, 50, abs_path('images/sprites/buttonLong_brown.png'), 'Wallet')
 
 btn_satiety = Button(85, 467, 150, 50, abs_path('images/sprites/buttonLong_brown.png'), 'Feed')
 btn_toilet = Button(285, 467, 150, 50, abs_path('images/sprites/buttonLong_brown.png'), 'Clear')
@@ -173,15 +182,29 @@ def game():
         btn_toilet.blit_btn()
         btn_play.blit_btn()
         btn_health.blit_btn()
+        btn_wallet.blit_btn()
+
+        gotchi_hud = pixel_font.render(f'$GOTCHI {gotchi.state["balance"]}   Lv {gotchi.level()}', True, (255, 214, 102))
+        screen.blit(gotchi_hud, gotchi_hud.get_rect(center=(470, 20)))
+        if gotchi.total_claimable() > 0:
+            claim_hud = pixel_font.render(f'+{gotchi.total_claimable()} to claim', True, (255, 255, 255))
+            screen.blit(claim_hud, claim_hud.get_rect(center=(470, 50)))
 
         pos_x, pos_y = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.K_ESCAPE:
+                gotchi.save()
                 endGame = True
                 pygame.quit()
             if event.type == daysEvent:
                 isSleep = True
+            if gotchi.clicked_wallet:
+                wallet_panel.handle_event((pos_x, pos_y), event)
+                continue
             if not isSleep:
+                if btn_wallet.rect.collidepoint((pos_x, pos_y)) and event.type == pygame.MOUSEBUTTONDOWN:
+                    gotchi.clicked_wallet = True
+                    button_sound.play()
                 if btn_statistic.rect.collidepoint((pos_x, pos_y)) and event.type == pygame.MOUSEBUTTONDOWN:
                     statisticsClass.clicked_statistics = True
                     button_sound.play()
@@ -226,6 +249,7 @@ def game():
         btn_toilet.hover(pos_x, pos_y)
         btn_play.hover(pos_x, pos_y)
         btn_health.hover(pos_x, pos_y)
+        btn_wallet.hover(pos_x, pos_y)
 
         if isSleep:
             screen.blit(night_image, (735, 70))
@@ -234,6 +258,8 @@ def game():
                 isSleep = False
                 night_timer = 0
                 daysCount += 1
+                gotchi.add_xp(50)
+                gotchi.save()
             night_timer += 1
 
         if cantClear:
@@ -263,14 +289,19 @@ def game():
             play.check_time(game_time)
             coins.draw(screen)
             coins.update(screen_height)
-            if pygame.sprite.spritecollide(basket, coins, True):
+            caught = pygame.sprite.spritecollide(basket, coins, True)
+            if caught:
                 playClass.scoreCount += 1
+                gotchi.reward_coin(len(caught))
 
         keys = pygame.key.get_pressed()
         play.control(keys)
         basket.control(keys)
 
         gameOver()
+
+        if gotchi.clicked_wallet:
+            wallet_panel.draw(pos_x, pos_y)
 
         if pygame.mouse.get_focused():
             screen.blit(cursor, (pos_x, pos_y))
@@ -296,34 +327,56 @@ def menu():
         start_btn.blit_btn()
         rule_btn.blit_btn()
         exit_btn.blit_btn()
+        wallet_menu_btn.blit_btn()
+        earn_menu_btn.blit_btn()
+        gotchi_label = pixel_font.render(f'$GOTCHI  {gotchi.state["balance"]}', True, (255, 214, 102))
+        screen.blit(gotchi_label, gotchi_label.get_rect(center=(650, 95)))
 
         pos_x, pos_y = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.K_ESCAPE:
+                gotchi.save()
                 endMenu = True
                 pygame.quit()
-            if start_btn.rect.collidepoint((pos_x, pos_y)) and event.type == pygame.MOUSEBUTTONDOWN:
-                button_sound.play()
-                endMenu = True
-                game()
-            if rule_btn.rect.collidepoint(pos_x, pos_y) and event.type == pygame.MOUSEBUTTONDOWN:
-                button_sound.play()
-                panelClass.clicked_help = True
-            if help_menu.exit_rect.collidepoint((pos_x, pos_y)) and event.type == pygame.MOUSEBUTTONDOWN:
-                button_sound.play()
-                panelClass.clicked_help = False
-            if exit_btn.rect.collidepoint((pos_x, pos_y)) and event.type == pygame.MOUSEBUTTONDOWN:
-                button_sound.play()
-                pygame.mouse.set_visible(True)
-                endMenu = True
-                pygame.quit()
+            if gotchi.clicked_wallet:
+                wallet_panel.handle_event((pos_x, pos_y), event)
+            elif gotchi.clicked_earn:
+                earn_panel.handle_event((pos_x, pos_y), event)
+            else:
+                if start_btn.rect.collidepoint((pos_x, pos_y)) and event.type == pygame.MOUSEBUTTONDOWN:
+                    button_sound.play()
+                    endMenu = True
+                    game()
+                if rule_btn.rect.collidepoint(pos_x, pos_y) and event.type == pygame.MOUSEBUTTONDOWN:
+                    button_sound.play()
+                    panelClass.clicked_help = True
+                if help_menu.exit_rect.collidepoint((pos_x, pos_y)) and event.type == pygame.MOUSEBUTTONDOWN:
+                    button_sound.play()
+                    panelClass.clicked_help = False
+                if wallet_menu_btn.rect.collidepoint((pos_x, pos_y)) and event.type == pygame.MOUSEBUTTONDOWN:
+                    button_sound.play()
+                    gotchi.clicked_wallet = True
+                if earn_menu_btn.rect.collidepoint((pos_x, pos_y)) and event.type == pygame.MOUSEBUTTONDOWN:
+                    button_sound.play()
+                    gotchi.clicked_earn = True
+                if exit_btn.rect.collidepoint((pos_x, pos_y)) and event.type == pygame.MOUSEBUTTONDOWN:
+                    button_sound.play()
+                    pygame.mouse.set_visible(True)
+                    endMenu = True
+                    pygame.quit()
 
         start_btn.hover(pos_x, pos_y)
         rule_btn.hover(pos_x, pos_y)
         exit_btn.hover(pos_x, pos_y)
+        wallet_menu_btn.hover(pos_x, pos_y)
+        earn_menu_btn.hover(pos_x, pos_y)
 
         if panelClass.clicked_help:
             help_menu.blit_panel()
+        if gotchi.clicked_wallet:
+            wallet_panel.draw(pos_x, pos_y)
+        elif gotchi.clicked_earn:
+            earn_panel.draw()
 
         if pygame.mouse.get_focused():
             screen.blit(cursor, (pos_x, pos_y))

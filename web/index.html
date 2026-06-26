@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gotchi — Play-to-Earn Pet</title>
+  <meta name="description" content="Gotchi — raise your digital pet and earn $GOTCHI. Play-to-earn." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ENTRY / LOGIN -->
+    <section id="screen-entry" class="screen active">
+      <div class="entry-card">
+        <h1 class="brand">Gotchi</h1>
+        <p class="tagline">Raise your pet. Earn <span class="token">$GOTCHI</span>.</p>
+
+        <div class="pet-hero">
+          <img id="hero-pet" alt="Gotchi pet" />
+        </div>
+
+        <div class="entry-actions">
+          <button id="btn-connect" class="btn btn-primary">Connect Wallet</button>
+          <button id="btn-guest" class="btn btn-ghost">Play as Guest</button>
+        </div>
+        <p class="entry-note">Wallet players keep their progress. Guests play freely, but nothing is saved.</p>
+
+        <button id="btn-how-entry" class="link-btn">How to earn $GOTCHI →</button>
+      </div>
+      <footer class="disclaimer">Demo build · $GOTCHI is an in-game token with no real-world value.</footer>
+    </section>
+
+    <!-- HOW TO EARN -->
+    <section id="screen-earn" class="screen">
+      <div class="earn-card">
+        <h2 class="brand-sm">How to earn <span class="token">$GOTCHI</span></h2>
+        <p class="sub">Play-to-earn — care for your Gotchi to earn tokens.</p>
+        <ol class="earn-steps">
+          <li><b>Connect a wallet</b> (or play as a guest to try it out).</li>
+          <li><b>Care for your Gotchi</b> — feed, clean, heal &amp; play.</li>
+          <li><b>Catch coins</b> in the mini-game: <b>+5 $GOTCHI</b> each.</li>
+          <li>Every action earns XP. <b>100 XP = +1 Level.</b></li>
+          <li>Hit a <b>milestone level</b> to unlock a claim reward.</li>
+          <li>Press <b>Claim</b> to bank your $GOTCHI.</li>
+        </ol>
+        <table class="tiers">
+          <thead><tr><th>Level</th><th>Reward</th></tr></thead>
+          <tbody>
+            <tr><td>2</td><td>100 $GOTCHI</td></tr>
+            <tr><td>5</td><td>250 $GOTCHI</td></tr>
+            <tr><td>10</td><td>500 $GOTCHI</td></tr>
+            <tr><td>25</td><td>1000 $GOTCHI</td></tr>
+          </tbody>
+        </table>
+        <p class="disclaimer">Demo only — $GOTCHI has no real-world value.</p>
+        <button class="btn btn-ghost" data-back>← Back</button>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="screen-game" class="screen">
+      <header class="topbar">
+        <div class="brand-sm">Gotchi</div>
+        <div class="wallet-chip" id="wallet-chip"></div>
+        <div class="balance-chip">
+          <span class="token">$GOTCHI</span>
+          <b id="hud-balance">0</b>
+          <span class="lvl">Lv <b id="hud-level">1</b></span>
+        </div>
+        <button id="btn-logout" class="btn btn-tiny">Exit</button>
+      </header>
+
+      <div id="guest-banner" class="guest-banner hidden">Guest mode — progress will not be saved.</div>
+
+      <main class="game-main">
+        <section class="pet-stage">
+          <div class="pet-frame">
+            <img id="game-pet" alt="Gotchi pet" />
+          </div>
+          <div id="mood" class="mood">Happy</div>
+        </section>
+
+        <section class="panel stats-panel">
+          <div class="stat" data-stat="satiety">
+            <img src="assets/lightning.png" alt="" /><span class="stat-label">Food</span>
+            <div class="bar"><i></i></div>
+          </div>
+          <div class="stat" data-stat="hygiene">
+            <img src="assets/toilet.png" alt="" /><span class="stat-label">Hygiene</span>
+            <div class="bar"><i></i></div>
+          </div>
+          <div class="stat" data-stat="happy">
+            <img src="assets/smile.png" alt="" /><span class="stat-label">Happy</span>
+            <div class="bar"><i></i></div>
+          </div>
+          <div class="stat" data-stat="health">
+            <img src="assets/health.png" alt="" /><span class="stat-label">Health</span>
+            <div class="bar"><i></i></div>
+          </div>
+        </section>
+
+        <section class="panel earn-panel">
+          <div class="earn-row">
+            <div>
+              <div class="earn-line">Claimable: <b id="hud-claimable">0</b> $GOTCHI</div>
+              <div class="earn-line muted" id="claim-status">Care &amp; play to earn $GOTCHI</div>
+            </div>
+            <button id="btn-claim" class="btn btn-gold">Claim</button>
+          </div>
+          <div class="xp"><div class="xp-bar"><i id="xp-fill"></i></div><span id="xp-text">0 / 100 XP</span></div>
+        </section>
+
+        <nav class="actions">
+          <button class="btn act" data-act="feed">Feed</button>
+          <button class="btn act" data-act="clean">Clean</button>
+          <button class="btn act" data-act="play">Play</button>
+          <button class="btn act" data-act="heal">Heal</button>
+          <button class="btn act ghost" data-act="how">How to Earn</button>
+        </nav>
+      </main>
+    </section>
+
+    <!-- MINI-GAME OVERLAY -->
+    <div id="minigame" class="overlay hidden">
+      <div class="mg-card">
+        <div class="mg-hud">
+          <span>Score: <b id="mg-score">0</b></span>
+          <span>Time: <b id="mg-time">30</b>s</span>
+          <span>+<b id="mg-earned">0</b> $GOTCHI</span>
+          <button id="mg-exit" class="btn btn-tiny">Quit</button>
+        </div>
+        <canvas id="mg-canvas" width="640" height="360"></canvas>
+        <p class="mg-hint">Move with your mouse or ← → keys. Catch the coins!</p>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

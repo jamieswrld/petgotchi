@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# $Gotchi local demo wallet / token save
+gotchi_save.json
+
+# Node / Cloudflare Wrangler
+node_modules/
+package-lock.json
+.wrangler/

@@ -1,5 +1,6 @@
 import pygame, os
 from mainConst import action, screen, pixel_font
+from gotchiClass import add_xp
 from abs_path import abs_path
 
 pygame.init()
@@ -79,15 +80,18 @@ class FoodMenu:
                 action['satiety'] += 3
                 action['toilet'] -= 3
                 action['logiki'] -= 5
+                add_xp(6)
         if self.box_2_rect.collidepoint((x, y)) and event.type == pygame.MOUSEBUTTONDOWN:
             if action['satiety'] + 6 <= 100 and action['logiki'] - 10 >= 0:
                 coin_sound.play()
                 action['satiety'] += 6
                 action['toilet'] -= 6
                 action['logiki'] -= 10
+                add_xp(6)
         if self.box_3_rect.collidepoint((x, y)) and event.type == pygame.MOUSEBUTTONDOWN:
             if action['satiety'] + 10 <= 100 and action['logiki'] - 15 >= 0:
                 coin_sound.play()
                 action['satiety'] += 10
                 action['toilet'] -= 10
                 action['logiki'] -= 15
+                add_xp(6)
