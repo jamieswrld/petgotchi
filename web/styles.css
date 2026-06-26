@@ -57,6 +57,9 @@
   --z-toast: 300;
   --z-tooltip: 400;
 
+  --site-header-h: 52px;
+  --site-footer-h: 76px;
+
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
@@ -87,56 +90,173 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-#app { min-height: 100svh; padding-bottom: 52px; }
+#app {
+  min-height: 100svh;
+  padding-top: var(--site-header-h);
+  padding-bottom: var(--site-footer-h);
+}
 
-/* ----- community links (X + CA) ----- */
-.site-links {
+/* ----- site header / footer + community chips ----- */
+.site-header,
+.site-footer {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
   z-index: var(--z-dropdown);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 8px 14px;
-  padding: 10px 16px max(10px, env(safe-area-inset-bottom));
-  background: rgba(22, 13, 46, 0.88);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-color: var(--line);
 }
-.site-link {
+
+.site-header {
+  top: 0;
+  padding: 8px 14px max(8px, env(safe-area-inset-top));
+  background:
+    linear-gradient(180deg, rgba(31, 20, 66, 0.92), rgba(22, 13, 46, 0.82));
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(20, 9, 46, 0.35);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.site-header__brand {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-height: 36px;
-  padding: 6px 12px;
+  gap: 7px;
+  font-family: "Baloo 2", sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--violet);
+  text-decoration: none;
+  text-shadow: 0 0 18px rgba(183, 156, 255, 0.35);
+  flex-shrink: 0;
+}
+
+.site-header__brand img {
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 10px rgba(190, 95, 235, 0.45));
+}
+
+.site-footer {
+  bottom: 0;
+  padding: 10px 16px max(10px, env(safe-area-inset-bottom));
+  background:
+    radial-gradient(420px 80px at 50% 0%, rgba(255, 154, 210, 0.12), transparent 70%),
+    linear-gradient(0deg, rgba(22, 13, 46, 0.94), rgba(31, 20, 66, 0.86));
+  border-top: 1px solid var(--line-strong);
+  text-align: center;
+}
+
+.site-footer__tag {
+  margin: 0 0 8px;
+  font-family: "Baloo 2", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+.community-links {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.community-links--footer { justify-content: center; }
+
+.community-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 5px 12px 5px 6px;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--muted);
+  background: linear-gradient(180deg, rgba(52, 38, 92, 0.55), rgba(64, 47, 110, 0.38));
   font-family: "Baloo 2", sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
+  color: var(--muted);
   text-decoration: none;
-  transition: color 0.15s var(--ease), border-color 0.15s var(--ease), background 0.15s var(--ease);
+  cursor: pointer;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease), background 0.15s var(--ease), box-shadow 0.15s var(--ease), transform 0.08s var(--ease);
 }
-.site-link:hover {
+
+.community-chip:hover {
   color: var(--ink);
-  border-color: var(--line-strong);
-  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-1px);
 }
-.site-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-.site-link__icon { color: var(--ink); font-size: 0.9rem; }
-.site-link__label {
+
+.community-chip:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.community-chip__badge {
+  display: grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.community-chip__text { white-space: nowrap; }
+
+.community-chip__mono {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.community-chip--x .community-chip__badge {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--ink);
+}
+
+.community-chip--x:hover {
+  border-color: rgba(255, 154, 210, 0.55);
+  background: linear-gradient(180deg, rgba(255, 154, 210, 0.16), rgba(52, 38, 92, 0.45));
+  box-shadow: 0 0 22px rgba(255, 154, 210, 0.18);
+}
+
+.community-chip--ca {
+  background: linear-gradient(180deg, rgba(255, 212, 94, 0.14), rgba(52, 38, 92, 0.4));
+  border-color: rgba(240, 179, 47, 0.38);
+}
+
+.community-chip--ca .community-chip__badge {
+  background: rgba(255, 212, 94, 0.22);
   color: var(--gold);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
+  border-radius: 6px;
 }
-.site-link__ca { font-variant-numeric: tabular-nums; color: var(--ink); }
-.site-link--ca { cursor: pointer; }
+
+.community-chip--ca:hover {
+  border-color: rgba(240, 179, 47, 0.62);
+  background: linear-gradient(180deg, rgba(255, 212, 94, 0.22), rgba(52, 38, 92, 0.42));
+  box-shadow: 0 0 20px rgba(240, 179, 47, 0.16);
+}
+
+@media (max-width: 520px) {
+  .site-header__brand span { display: none; }
+  .community-chip__text { display: none; }
+  .community-chip { padding: 5px 8px; }
+  .community-chip--ca .community-chip__text { display: inline; font-size: 0.72rem; }
+}
 
 h1, h2, h3, .section-title, .panel-title, .stage-name {
   font-family: "Baloo 2", "Nunito", sans-serif;
@@ -270,7 +390,8 @@ h1, h2, h3, .section-title, .panel-title, .stage-name {
 }
 @keyframes bob { 50% { transform: translateY(-9px); } }
 .brand { font-size: clamp(2.6rem, 9vw, 3.4rem); margin: 2px 0 0; }
-.tagline { color: var(--muted); margin: 4px 0 20px; font-size: 1.05rem; }
+.tagline { color: var(--muted); margin: 4px 0 12px; font-size: 1.05rem; }
+.btn-claim-gotchi { width: 100%; margin: 0 0 18px; }
 .entry-actions { display: grid; gap: 11px; }
 .entry-note { color: var(--muted-2); font-size: 0.82rem; line-height: 1.5; margin: 16px 6px 4px; text-wrap: balance; }
 
@@ -305,7 +426,7 @@ h1, h2, h3, .section-title, .panel-title, .stage-name {
 /* ====================================================================== */
 #screen-game { flex-direction: column; align-items: stretch; padding: 0; }
 .topbar {
-  position: sticky; top: 0; z-index: var(--z-dropdown);
+  position: sticky; top: var(--site-header-h); z-index: calc(var(--z-dropdown) - 1);
   display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
   padding: 10px 14px; border-bottom: 1px solid var(--line);
   background: rgba(22, 13, 46, 0.72); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
@@ -320,7 +441,26 @@ h1, h2, h3, .section-title, .panel-title, .stage-name {
   max-width: 100%; min-width: 0;
 }
 .chip b { color: var(--ink); }
-.chip-token { background: rgba(255, 212, 94, 0.12); border-color: rgba(240, 179, 47, 0.4); }
+.chip-token { background: rgba(255, 212, 94, 0.12); border-color: rgba(240, 179, 47, 0.4); gap: 8px; }
+.chip-claim-gotchi {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--gold), var(--gold-deep));
+  border: 1px solid #ffe49a;
+  color: #3a2900;
+  font-family: "Baloo 2", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(240, 179, 47, 0.25);
+  transition: filter 0.15s var(--ease), transform 0.08s var(--ease);
+}
+.chip-claim-gotchi:hover { filter: brightness(1.06); transform: translateY(-1px); }
+.chip-claim-gotchi:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .chip-name { cursor: pointer; color: var(--ink); font-weight: 700; font-family: "Baloo 2", sans-serif; }
 .chip-name:hover { border-color: var(--line-strong); }
 .chip-name:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }

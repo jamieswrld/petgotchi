@@ -13,6 +13,25 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="#" aria-label="Gotchi home">
+        <img src="assets/logo.png" alt="" />
+        <span>Gotchi</span>
+      </a>
+      <nav class="community-links" aria-label="Community links">
+        <a class="community-chip community-chip--x" href="https://x.com/playtamagotchi" target="_blank" rel="noopener noreferrer">
+          <span class="community-chip__badge" aria-hidden="true">𝕏</span>
+          <span class="community-chip__text">@playtamagotchi</span>
+        </a>
+        <button type="button" class="community-chip community-chip--ca btn-copy-ca" title="Copy contract address">
+          <span class="community-chip__badge">CA</span>
+          <span class="community-chip__text community-chip__mono">4UeC…pump</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
   <div id="app">
 
     <!-- ENTRY / LOGIN -->
@@ -32,7 +51,10 @@
       <div class="entry-card">
         <img class="logo" src="assets/logo.png" alt="Gotchi logo" />
         <h1 class="brand">Gotchi</h1>
-        <p class="tagline">Raise your bloom. Earn <span class="token">$GOTCHI</span>.</p>
+        <p class="tagline">Raise your bloom.</p>
+        <a class="btn btn-gold btn-claim-gotchi" href="https://pump.fun/coin/4UeCUo8AarFJ9edENiy6sUp2ian9hHvpScceJTvWpump" target="_blank" rel="noopener noreferrer">
+          <span class="btn-label">Claim Gotchi</span>
+        </a>
 
         <div class="entry-actions">
           <button id="btn-connect" type="button" class="btn btn-primary">
@@ -93,7 +115,10 @@
         <button id="profile-name" type="button" class="chip chip-name" title="Edit name">
           <span id="profile-name-text">—</span><span class="edit-pen" aria-hidden="true">✎</span>
         </button>
-        <span class="chip chip-token"><span class="token">$GOTCHI</span> <b id="hud-balance">0</b></span>
+        <span class="chip chip-token">
+          <a class="chip-claim-gotchi btn-claim-gotchi" href="https://pump.fun/coin/4UeCUo8AarFJ9edENiy6sUp2ian9hHvpScceJTvWpump" target="_blank" rel="noopener noreferrer">Claim Gotchi</a>
+          <b id="hud-balance">0</b>
+        </span>
         <span class="chip chip-wallet" id="wallet-chip"></span>
         <button id="btn-logout" type="button" class="btn btn-tiny">Exit</button>
       </header>
@@ -206,15 +231,18 @@
     <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
   </div>
 
-  <footer class="site-links" aria-label="Community links">
-    <a class="site-link site-link--x" href="https://x.com/playtamagotchi" target="_blank" rel="noopener noreferrer">
-      <span class="site-link__icon" aria-hidden="true">𝕏</span>
-      <span>@playtamagotchi</span>
-    </a>
-    <button type="button" class="site-link site-link--ca" id="btn-copy-ca" title="Copy contract address">
-      <span class="site-link__label">CA</span>
-      <span class="site-link__ca">4UeC…pump</span>
-    </button>
+  <footer class="site-footer">
+    <p class="site-footer__tag">Join the bloom</p>
+    <nav class="community-links community-links--footer" aria-label="Community links">
+      <a class="community-chip community-chip--x" href="https://x.com/playtamagotchi" target="_blank" rel="noopener noreferrer">
+        <span class="community-chip__badge" aria-hidden="true">𝕏</span>
+        <span class="community-chip__text">@playtamagotchi</span>
+      </a>
+      <button type="button" class="community-chip community-chip--ca btn-copy-ca" title="Copy contract address">
+        <span class="community-chip__badge">CA</span>
+        <span class="community-chip__text community-chip__mono">4UeC…pump</span>
+      </button>
+    </nav>
   </footer>
 
   <script src="config.js"></script>

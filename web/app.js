@@ -15,6 +15,8 @@ const $$ = (sel) => document.querySelectorAll(sel);
 const fmt = (n) => Number(n).toLocaleString("en-US");
 
 const TOKEN_CA = "4UeCUo8AarFJ9edENiy6sUp2ian9hHvpScceJTvWpump";
+const TOKEN_PUMP = `https://pump.fun/coin/${TOKEN_CA}`;
+document.querySelectorAll(".btn-claim-gotchi").forEach((el) => { el.href = TOKEN_PUMP; });
 
 /* ===================== economy config ===================== */
 const PLAYS_PER_DAY = 2;            // mini-game plays per UTC day
@@ -489,13 +491,15 @@ connectBtn.addEventListener("click", async () => {
 $("#btn-guest").addEventListener("click", enterAsGuest);
 $("#btn-how-entry").addEventListener("click", () => showScreen("screen-earn"));
 
-$("#btn-copy-ca").addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText(TOKEN_CA);
-    toast("Contract address copied!");
-  } catch (e) {
-    toast("Copy failed — select CA manually");
-  }
+document.querySelectorAll(".btn-copy-ca").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(TOKEN_CA);
+      toast("Contract address copied!");
+    } catch (e) {
+      toast("Copy failed — select CA manually");
+    }
+  });
 });
 $$("[data-back]").forEach((b) => b.addEventListener("click", () => showScreen(lastScreen)));
 
