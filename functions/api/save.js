@@ -1,22 +1,20 @@
 // Cloudflare Pages Function — cross-device Gotchi saves, backed by Workers KV.
 //
 // Routes (same-origin): GET/POST /api/save
-//   GET  /api/save?address=0x...   -> { address, state | null }
-//   POST /api/save  { address, state } -> { ok, state }
+//   GET  /api/save?address=<base58>   -> { address, state | null }
+//   POST /api/save  { address, state, auth } -> { ok, state }
 //
-// Saves are keyed by the Solana wallet address (case-sensitive base58). SECURITY
-// NOTE: for this demo (the $GOTCHI token has no real-world value) writes are NOT
-// signature-verified — anyone who knows an address could overwrite its save. Before
-// attaching any real value, add wallet-signature auth: have the client signMessage a
-// nonce and verify the Ed25519 signature here. (Bonus: Cloudflare Workers' Web Crypto
-// supports Ed25519 natively, so this needs no extra dependency.)
+// Saves are keyed by the Solana wallet address (case-sensitive base58). POST writes
+// require a fresh wallet signMessage payload (Ed25519) matching the address.
 //
 // If the KV binding (GOTCHI_KV) is not configured, the handlers return 503 and the
 // frontend transparently falls back to localStorage, so the site still works.
 
+import { verifyWalletAuth } from "./_walletAuth.js";
+
 // Solana base58 pubkey: base58 alphabet (no 0 O I l), typically 32-44 chars.
 const ADDR_RE = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
-const ALLOWED_TIERS = [2, 5, 10, 25];
+const ALLOWED_TIERS = [3, 7, 12, 20, 32];
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -41,6 +39,8 @@ function sanitize(state) {
   const s = state && typeof state === "object" ? state : {};
   const st = s.stats && typeof s.stats === "object" ? s.stats : {};
   return {
+    username: typeof s.username === "string" ? s.username.slice(0, 20) : "",
+    bond: clampInt(s.bond, 0, 100, 50),
     stats: {
       satiety: clampInt(st.satiety, 0, 100, 100),
       hygiene: clampInt(st.hygiene, 0, 100, 100),
@@ -85,6 +85,8 @@ export async function onRequestPost({ request, env }) {
   }
   const address = body.address || "";
   if (!ADDR_RE.test(address)) return json({ error: "invalid address" }, 400);
+  const authErr = await verifyWalletAuth(body.auth, address);
+  if (authErr) return json({ error: authErr }, 401);
   const state = sanitize(body.state);
   await env.GOTCHI_KV.put("save:" + address, JSON.stringify(state));
   return json({ ok: true, state });

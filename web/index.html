@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Gotchi — Play-to-Earn Pet</title>
-  <meta name="description" content="Gotchi — raise your digital pet and earn $GOTCHI. Play-to-earn." />
+  <meta name="description" content="Gotchi — raise your cherry-blossom pet, grow it through evolution stages, and earn $GOTCHI. Play-to-earn on Solana." />
+  <meta name="theme-color" content="#1b1138" />
   <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -28,13 +32,15 @@
       <div class="entry-card">
         <img class="logo" src="assets/logo.png" alt="Gotchi logo" />
         <h1 class="brand">Gotchi</h1>
-        <p class="tagline">Raise your pet. Earn <span class="token">$GOTCHI</span>.</p>
+        <p class="tagline">Raise your bloom. Earn <span class="token">$GOTCHI</span>.</p>
 
         <div class="entry-actions">
-          <button id="btn-connect" type="button" class="btn btn-primary">Connect Wallet</button>
+          <button id="btn-connect" type="button" class="btn btn-primary">
+            <span class="btn-label">Connect Wallet</span>
+          </button>
           <button id="btn-guest" type="button" class="btn btn-ghost">Play as Guest</button>
         </div>
-        <p class="entry-note">Wallet players keep their progress. Guests play freely, but nothing is saved.</p>
+        <p class="entry-note">Connect a Solana wallet &amp; sign to keep your Gotchi across visits. Guests play freely — nothing is saved.</p>
 
         <button id="btn-how-entry" type="button" class="link-btn">How to earn $GOTCHI →</button>
       </div>
@@ -42,110 +48,174 @@
 
     <!-- HOW TO EARN -->
     <section id="screen-earn" class="screen">
-      <div class="earn-card">
-        <h2 class="brand-sm">How to earn <span class="token">$GOTCHI</span></h2>
-        <p class="sub">Play-to-earn — care for your Gotchi to earn tokens.</p>
+      <div class="bg-decor bg-decor--soft" aria-hidden="true">
+        <span class="glow glow-2"></span><span class="glow glow-3"></span>
+      </div>
+      <div class="earn-card panel">
+        <button class="back-link" type="button" data-back>← Back</button>
+        <h2 class="section-title">How to earn <span class="token">$GOTCHI</span></h2>
+        <p class="sub">Play-to-earn on Solana — care for your bloom, and it pays you back.</p>
         <ol class="earn-steps">
-          <li><b>Connect a wallet</b> (or play as a guest to try it out).</li>
-          <li><b>Care for your Gotchi</b> — feed, clean, heal &amp; play.</li>
+          <li><b>Connect &amp; sign</b> to verify your wallet (or try it as a guest).</li>
+          <li><b>Care daily</b> — feed, clean, heal &amp; play to raise XP and <b>Bond</b>.</li>
           <li><b>Catch coins</b> in the mini-game: <b>+5 $GOTCHI</b> each — <b>2 plays/day</b>.</li>
-          <li>Every action earns XP. <b>100 XP = +1 Level.</b></li>
-          <li>Hit a <b>milestone level</b> to unlock a claim reward.</li>
-          <li>Press <b>Claim</b> to bank your $GOTCHI.</li>
+          <li><b>Bond multiplies earnings</b> up to <b>1.5×</b> — keep every vital healthy.</li>
+          <li><b>Grow &amp; evolve</b> through stages: Seedling → Sprout → … → Elder Sakura.</li>
+          <li><b>Claim</b> at milestone levels to bank your $GOTCHI.</li>
         </ol>
         <table class="tiers">
-          <thead><tr><th>Level</th><th>Reward</th></tr></thead>
+          <thead><tr><th>Reach level</th><th>Claim reward</th></tr></thead>
           <tbody>
-            <tr><td>2</td><td>100 $GOTCHI</td></tr>
-            <tr><td>5</td><td>250 $GOTCHI</td></tr>
-            <tr><td>10</td><td>500 $GOTCHI</td></tr>
-            <tr><td>25</td><td>1000 $GOTCHI</td></tr>
+            <tr><td>Lv 3</td><td>150 $GOTCHI</td></tr>
+            <tr><td>Lv 7</td><td>400 $GOTCHI</td></tr>
+            <tr><td>Lv 12</td><td>800 $GOTCHI</td></tr>
+            <tr><td>Lv 20</td><td>1,600 $GOTCHI</td></tr>
+            <tr><td>Lv 32</td><td>3,500 $GOTCHI</td></tr>
           </tbody>
         </table>
-        <p class="disclaimer">Demo only — $GOTCHI has no real-world value.</p>
-        <button class="btn btn-ghost" data-back>← Back</button>
+        <p class="fineprint">Leveling slows as you grow — every stage is earned.</p>
       </div>
     </section>
 
     <!-- GAME -->
     <section id="screen-game" class="screen">
+      <div class="bg-decor bg-decor--game" aria-hidden="true">
+        <img class="watermark" src="assets/logo.png" alt="" />
+        <span class="glow glow-1"></span>
+        <span class="glow glow-2"></span>
+        <span class="petal petal-2"></span>
+        <span class="petal petal-4"></span>
+        <span class="petal petal-6"></span>
+      </div>
+
       <header class="topbar">
         <div class="brand-sm"><img class="brand-logo" src="assets/logo.png" alt="" />Gotchi</div>
-        <div class="wallet-chip" id="wallet-chip"></div>
-        <div class="balance-chip">
-          <span class="token">$GOTCHI</span>
-          <b id="hud-balance">0</b>
-          <span class="lvl">Lv <b id="hud-level">1</b></span>
-        </div>
-        <button id="btn-logout" class="btn btn-tiny">Exit</button>
+        <button id="profile-name" type="button" class="chip chip-name" title="Edit name">
+          <span id="profile-name-text">—</span><span class="edit-pen" aria-hidden="true">✎</span>
+        </button>
+        <span class="chip chip-token"><span class="token">$GOTCHI</span> <b id="hud-balance">0</b></span>
+        <span class="chip chip-wallet" id="wallet-chip"></span>
+        <button id="btn-logout" type="button" class="btn btn-tiny">Exit</button>
       </header>
 
-      <div id="guest-banner" class="guest-banner hidden">Guest mode — progress will not be saved.</div>
+      <div id="guest-banner" class="guest-banner hidden">Guest mode — progress won't be saved.</div>
 
       <main class="game-main">
-        <section class="pet-stage">
-          <div class="pet-frame">
-            <img id="game-pet" alt="Gotchi pet" />
+        <section class="panel pet-stage">
+          <div class="pet-frame"><img id="game-pet" alt="Your Gotchi" /></div>
+          <div class="stage-meta">
+            <div class="ring" id="lvl-ring" style="--pct:0">
+              <div class="ring__core"><b id="hud-level">1</b><span>LVL</span></div>
+            </div>
+            <div class="stage-text">
+              <div class="stage-name" id="stage-name">Seedling</div>
+              <div class="stage-blurb" id="stage-blurb">A tiny sprout, full of promise.</div>
+              <div class="stage-mood"><span class="dot" id="mood-dot"></span><span id="mood">Happy</span> · <span id="xp-text">0 / 70 XP</span></div>
+            </div>
           </div>
-          <div id="mood" class="mood">Happy</div>
         </section>
 
-        <section class="panel stats-panel">
+        <section class="panel vitals">
+          <div class="panel-head"><h2 class="panel-title">Vitals</h2><span class="bond-mult" id="bond-mult">1.0× earnings</span></div>
           <div class="stat" data-stat="satiety">
-            <img src="assets/lightning.png" alt="" /><span class="stat-label">Food</span>
-            <div class="bar"><i></i></div>
+            <img class="stat-ic" src="assets/lightning.png" alt="" />
+            <div class="stat-main">
+              <div class="stat-top"><span class="stat-name">Food</span><span class="stat-val">100</span></div>
+              <div class="bar"><i></i></div>
+            </div>
           </div>
           <div class="stat" data-stat="hygiene">
-            <img src="assets/toilet.png" alt="" /><span class="stat-label">Hygiene</span>
-            <div class="bar"><i></i></div>
+            <img class="stat-ic" src="assets/toilet.png" alt="" />
+            <div class="stat-main">
+              <div class="stat-top"><span class="stat-name">Hygiene</span><span class="stat-val">100</span></div>
+              <div class="bar"><i></i></div>
+            </div>
           </div>
           <div class="stat" data-stat="happy">
-            <img src="assets/smile.png" alt="" /><span class="stat-label">Happy</span>
-            <div class="bar"><i></i></div>
+            <img class="stat-ic" src="assets/smile.png" alt="" />
+            <div class="stat-main">
+              <div class="stat-top"><span class="stat-name">Mood</span><span class="stat-val">100</span></div>
+              <div class="bar"><i></i></div>
+            </div>
           </div>
           <div class="stat" data-stat="health">
-            <img src="assets/health.png" alt="" /><span class="stat-label">Health</span>
-            <div class="bar"><i></i></div>
+            <img class="stat-ic" src="assets/health.png" alt="" />
+            <div class="stat-main">
+              <div class="stat-top"><span class="stat-name">Health</span><span class="stat-val">100</span></div>
+              <div class="bar"><i></i></div>
+            </div>
+          </div>
+          <div class="stat stat--bond" data-stat="bond">
+            <span class="stat-ic stat-ic--emoji">💗</span>
+            <div class="stat-main">
+              <div class="stat-top"><span class="stat-name">Bond</span><span class="stat-val">50</span></div>
+              <div class="bar bar--bond"><i></i></div>
+            </div>
           </div>
         </section>
 
         <section class="panel earn-panel">
           <div class="earn-row">
-            <div>
-              <div class="earn-line">Claimable: <b id="hud-claimable">0</b> $GOTCHI</div>
+            <div class="earn-info">
+              <div class="earn-line"><b id="hud-claimable">0</b> <span class="token">$GOTCHI</span> claimable</div>
               <div class="earn-line muted" id="claim-status">Care &amp; play to earn $GOTCHI</div>
             </div>
-            <button id="btn-claim" class="btn btn-gold">Claim</button>
+            <button id="btn-claim" type="button" class="btn btn-gold">Claim</button>
           </div>
-          <div class="xp"><div class="xp-bar"><i id="xp-fill"></i></div><span id="xp-text">0 / 100 XP</span></div>
         </section>
 
-        <nav class="actions">
-          <button class="btn act" data-act="feed">Feed</button>
-          <button class="btn act" data-act="clean">Clean</button>
-          <button class="btn act" data-act="play">Play</button>
-          <button class="btn act" data-act="heal">Heal</button>
-          <button class="btn act ghost" data-act="how">How to Earn</button>
+        <nav class="actions" aria-label="Care actions">
+          <button class="btn act" type="button" data-act="feed"><span class="act-i">🍙</span><span>Feed</span></button>
+          <button class="btn act" type="button" data-act="clean"><span class="act-i">🫧</span><span>Clean</span></button>
+          <button class="btn act act--play" type="button" data-act="play"><span class="act-i">🎮</span><span class="play-label">Play</span></button>
+          <button class="btn act" type="button" data-act="heal"><span class="act-i">💊</span><span>Heal</span></button>
+          <button class="btn act act--ghost" type="button" data-act="how"><span class="act-i">？</span><span>Earn</span></button>
         </nav>
       </main>
     </section>
 
-    <!-- MINI-GAME OVERLAY -->
-    <div id="minigame" class="overlay hidden">
-      <div class="mg-card">
-        <div class="mg-hud">
-          <span>Score: <b id="mg-score">0</b></span>
-          <span>Time: <b id="mg-time">30</b>s</span>
-          <span>+<b id="mg-earned">0</b> $GOTCHI</span>
-          <button id="mg-exit" class="btn btn-tiny">Quit</button>
-        </div>
-        <canvas id="mg-canvas" width="640" height="360"></canvas>
-        <p class="mg-hint">Move with your mouse or ← → keys. Catch the coins!</p>
+    <!-- NAME MODAL -->
+    <div id="name-modal" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="name-title">
+      <div class="modal-card panel">
+        <img class="modal-logo" src="assets/logo.png" alt="" />
+        <h2 id="name-title" class="section-title">Name your Gotchi</h2>
+        <p class="sub" id="name-sub">A name to call your bloom. You can change it anytime.</p>
+        <form id="name-form" novalidate>
+          <input id="name-input" type="text" maxlength="20" inputmode="text" autocomplete="off"
+                 spellcheck="false" placeholder="e.g. SakuraPip" aria-label="Username" />
+          <p class="field-error hidden" id="name-error"></p>
+          <button id="name-save" type="submit" class="btn btn-primary"><span class="btn-label">Save name</span></button>
+        </form>
       </div>
     </div>
 
-    <div id="toast" class="toast hidden"></div>
+    <!-- MINI-GAME OVERLAY -->
+    <div id="minigame" class="overlay hidden">
+      <div class="mg-card panel">
+        <div class="mg-hud">
+          <span>Score <b id="mg-score">0</b></span>
+          <span>Time <b id="mg-time">30</b>s</span>
+          <span class="mg-earn">+<b id="mg-earned">0</b> $GOTCHI</span>
+          <button id="mg-exit" type="button" class="btn btn-tiny">Finish</button>
+        </div>
+        <canvas id="mg-canvas" width="640" height="360"></canvas>
+        <p class="mg-hint">Move with your mouse or ← → keys — catch the falling coins.</p>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
   </div>
+
+  <footer class="site-links" aria-label="Community links">
+    <a class="site-link site-link--x" href="https://x.com/playtamagotchi" target="_blank" rel="noopener noreferrer">
+      <span class="site-link__icon" aria-hidden="true">𝕏</span>
+      <span>@playtamagotchi</span>
+    </a>
+    <button type="button" class="site-link site-link--ca" id="btn-copy-ca" title="Copy contract address">
+      <span class="site-link__label">CA</span>
+      <span class="site-link__ca">4UeC…pump</span>
+    </button>
+  </footer>
 
   <script src="config.js"></script>
   <script src="app.js"></script>

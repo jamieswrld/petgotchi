@@ -48,9 +48,6 @@ The free option is a **Cloudflare Worker** that hosts just the save API:
 python -m http.server 8000 --directory web    # http://127.0.0.1:8000  (saves -> localStorage)
 ```
 
-## Security note before any real value
-Saves are keyed by wallet address and are **not signature-verified** in this demo, so anyone
-who knows an address could overwrite its save. `$GOTCHI` has no real value, so this is fine
-for now. Before attaching value, add wallet-signature auth: have the client `signMessage` a
-nonce and verify the **Ed25519** signature in the backend (Cloudflare Workers' Web Crypto
-supports Ed25519 natively — no extra dependency needed).
+## Security note
+POST saves require a fresh wallet **signMessage** (Ed25519). The client signs a nonce-bearing
+message on connect; the backend verifies it before writing to KV. GET loads remain public.
