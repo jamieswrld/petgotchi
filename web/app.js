@@ -13,6 +13,7 @@ const $$ = (sel) => document.querySelectorAll(sel);
 const XP_PER_LEVEL = 100;
 const COIN_XP = 4;
 const COIN_GOTCHI = 5;
+const PLAYS_PER_DAY = 2; // mini-game can be played twice per day
 const CLAIM_TIERS = [
   [2, 100],
   [5, 250],
@@ -37,6 +38,7 @@ function defaultState() {
     balance: 0,
     pending: 0,
     claimedTiers: [],
+    play: { day: "", count: 0 }, // daily mini-game counter (UTC day)
   };
 }
 let state = defaultState();
@@ -103,6 +105,20 @@ function load(addr) {
 // --- economy helpers ------------------------------------------------------
 const level = () => 1 + Math.floor(state.xp / XP_PER_LEVEL);
 const xpIntoLevel = () => state.xp % XP_PER_LEVEL;
+
+// --- daily mini-game limit (resets each UTC day) -------------------------
+const todayStr = () => new Date().toISOString().slice(0, 10);
+function playsLeft() {
+  const p = state.play || (state.play = { day: "", count: 0 });
+  if (p.day !== todayStr()) return PLAYS_PER_DAY; // new day -> full allowance
+  return Math.max(0, PLAYS_PER_DAY - p.count);
+}
+function consumePlay() {
+  const t = todayStr();
+  if (!state.play || state.play.day !== t) state.play = { day: t, count: 0 };
+  state.play.count += 1;
+  save();
+}
 
 function claimableTiers() {
   const lvl = level();
@@ -229,6 +245,14 @@ function renderHud() {
 
   const avg = (state.stats.satiety + state.stats.hygiene + state.stats.happy + state.stats.health) / 4;
   $("#mood").textContent = avg > 70 ? "Happy" : avg > 40 ? "Okay" : avg > 15 ? "Needs care" : "Critical!";
+
+  const playBtn = document.querySelector('.actions .act[data-act="play"]');
+  if (playBtn) {
+    const left = playsLeft();
+    playBtn.textContent = `Play (${left})`;
+    playBtn.disabled = left <= 0;
+    playBtn.title = left <= 0 ? `Daily limit reached — ${PLAYS_PER_DAY} plays/day` : `${left} of ${PLAYS_PER_DAY} plays left today`;
+  }
 }
 
 // --- pet animation --------------------------------------------------------
@@ -261,7 +285,13 @@ setInterval(() => {
 
 // --- actions --------------------------------------------------------------
 function doAction(act) {
-  if (act === "play") { openMinigame(); return; }
+  if (act === "play") {
+    if (playsLeft() <= 0) { toast(`Daily limit: ${PLAYS_PER_DAY} plays. Come back tomorrow!`); return; }
+    consumePlay();
+    openMinigame();
+    renderHud();
+    return;
+  }
   if (act === "how") { showScreen("screen-earn"); return; }
 
   const cfg = ACTION[act];

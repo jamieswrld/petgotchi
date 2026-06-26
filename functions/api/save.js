@@ -53,7 +53,14 @@ function sanitize(state) {
     claimedTiers: Array.isArray(s.claimedTiers)
       ? [...new Set(s.claimedTiers.map(Number).filter((t) => ALLOWED_TIERS.includes(t)))]
       : [],
+    play: sanitizePlay(s.play),
   };
+}
+
+function sanitizePlay(p) {
+  p = p && typeof p === "object" ? p : {};
+  const day = typeof p.day === "string" && /^\d{4}-\d{2}-\d{2}$/.test(p.day) ? p.day : "";
+  return { day, count: clampInt(p.count, 0, 1000) };
 }
 
 export async function onRequestOptions() {
